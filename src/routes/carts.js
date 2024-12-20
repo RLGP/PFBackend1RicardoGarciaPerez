@@ -3,18 +3,15 @@ const fs = require('fs');
 const router = express.Router();
 const cartsFilePath = './src/data/carts.json';
 
-// Helper function to read carts from file
 const readCarts = () => {
     const data = fs.readFileSync(cartsFilePath);
     return JSON.parse(data);
 };
 
-// Helper function to write carts to file
 const writeCarts = (carts) => {
     fs.writeFileSync(cartsFilePath, JSON.stringify(carts , null, 2));
 };
 
-// POST /api/carts/
 router.post('/', (req, res) => {
     const carts = readCarts();
     const newCart = {
@@ -26,7 +23,6 @@ router.post('/', (req, res) => {
     res.status(201).json(newCart);
 });
 
-// GET /api/carts/:cid
 router.get('/:cid', (req, res) => {
     const carts = readCarts();
     const cart = carts.find(c => c.id === parseInt(req.params.cid));
@@ -37,7 +33,6 @@ router.get('/:cid', (req, res) => {
     }
 });
 
-// POST /api/carts/:cid/product/:pid
 router.post('/:cid/product/:pid', (req, res) => {
     const carts = readCarts();
     const cart = carts.find(c => c.id === parseInt(req.params.cid));

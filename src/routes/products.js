@@ -3,18 +3,15 @@ const fs = require('fs');
 const router = express.Router();
 const productsFilePath = './src/data/products.json';
 
-// Helper function to read products from file
 const readProducts = () => {
     const data = fs.readFileSync(productsFilePath);
     return JSON.parse(data);
 };
 
-// Helper function to write products to file
 const writeProducts = (products) => {
     fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
 };
 
-// GET /api/products/
 router.get('/', (req, res) => {
     const products = readProducts();
     const limit = parseInt(req.query.limit);
@@ -22,7 +19,6 @@ router.get('/', (req, res) => {
     res.json(result);
 });
 
-// GET /api/products/:pid
 router.get('/:pid', (req, res) => {
     const products = readProducts();
     const product = products.find(p => p.id === parseInt(req.params.pid));
@@ -33,7 +29,6 @@ router.get('/:pid', (req, res) => {
     }
 });
 
-// POST /api/products/
 router.post('/', (req, res) => {
     const products = readProducts();
     const newProduct = {
@@ -52,7 +47,6 @@ router.post('/', (req, res) => {
     res.status(201).json(newProduct);
 });
 
-// PUT /api/products/:pid
 router.put('/:pid', (req, res) => {
     const products = readProducts();
     const index = products.findIndex(p => p.id === parseInt(req.params.pid));
@@ -66,7 +60,6 @@ router.put('/:pid', (req, res) => {
     }
 });
 
-// DELETE /api/products/:pid
 router.delete('/:pid', (req, res) => {
     const products = readProducts();
     const filteredProducts = products.filter(p => p.id !== parseInt(req.params.pid));
