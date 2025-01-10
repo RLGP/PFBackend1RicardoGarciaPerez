@@ -3,11 +3,11 @@
     "id": 1,
     "title": "producto prueba 1",
     "description": "Este es un producto prueba 1",
-    "price": 150,
+    "price": 100,
     "status": true,
     "thumbnail": "",
     "code": "prb1",
-    "stock": 4
+    "stock": 3
   },
   {
     "id": 2,
@@ -38,5 +38,18 @@
     "status": true,
     "stock": 10,
     "thumbnails": []
+  },
+  {
+    "id": 5,
+    "title": "PruebaWebsocket",
+    "description": "websocket1",
+    "code": "Sin código",
+    "price": 10,
+    "status": true,
+    "stock": 0,
+    "category": "Sin categoría",
+    "thumbnails": [
+      ""
+    ]
   }
 ]

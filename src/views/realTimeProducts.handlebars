@@ -1,0 +1,63 @@
+<h1>Lista de productos en tiempo real</h1>
+<form id="add-product-form">
+    <input type="text" id="title" placeholder="Título" >
+    <input type="text" id="description" placeholder="Descripción" >
+    <input type="text" id="code" placeholder="Código" >
+    <input type="number" id="price" placeholder="Precio" >
+    <input type="number" id="stock" placeholder="Stock" >
+    <input type="text" id="category" placeholder="Categoría" >
+    <input type="text" id="thumbnails" placeholder="Thumbnails ">
+    <button type="submit" >Agregar producto</button>
+</form>
+<ul>
+    {{#each products}}
+        <li>
+            {{this.title}} - ${{this.price}}
+            <button class="borrar" data-id="{{this.id}}">Eliminar</button>
+        </li>
+    {{/each}}
+</ul>
+
+<!-- Formulario para agregar nuevos productos -->
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    socket.on('products', (products) => {
+        const productList = document.querySelector('ul');
+        productList.innerHTML = products.map(product => `
+            <li>
+                ${product.title} - $${product.price}
+                <button class="delete-product" data-id="${product.id}">Eliminar</button>
+            </li>
+        `).join('');
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('add-product-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const newProduct = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                code: document.getElementById('code').value,
+                price: parseFloat(document.getElementById('price').value),
+                stock: parseInt(document.getElementById('stock').value),
+                category: document.getElementById('category').value,
+                thumbnails: document.getElementById('thumbnails').value.split(',').map(thumbnail => thumbnail.trim())
+            };
+
+            socket.emit('newProduct', newProduct); 
+            document.getElementById('add-product-form').reset();
+        });
+
+        // Manejar el clic en el botón de eliminar
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-product')) {
+                const productId = event.target.getAttribute('data-id');
+                socket.emit('deleteProduct', parseInt(productId)); 
+            }
+        });
+    });
+</script>
