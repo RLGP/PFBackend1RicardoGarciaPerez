@@ -20,14 +20,22 @@
     <button type="submit">Aplicar filtros</button>
 </form>
 
-<ul>
+<ul class="api-products-list">
     {{#each products}}
-        <li>
-            {{this.title}} - ${{this.price}}
+        <li class="api-product-item">
+            <h2 class="api-product-title">{{this.title}}</h2>
+            <p class="api-product-id"><strong>ID:</strong> {{this._id}}</p>
+            <p class="api-product-description"><strong>Descripción:</strong> {{this.description}}</p>
+            <p class="api-product-code"><strong>Código:</strong> {{this.code}}</p>
+            <p class="api-product-price"><strong>Precio:</strong> ${{this.price}}</p>
+            <p class="api-product-status"><strong>Estado:</strong> {{#if this.status}}Disponible{{else}}No disponible{{/if}}</p>
+            <p class="api-product-stock"><strong>Stock:</strong> {{this.stock}}</p>
+            <p class="api-product-category"><strong>Categoría:</strong> {{this.category}}</p>
+            <p class="api-product-thumbnails"><strong>Thumbnails:</strong> {{#each this.thumbnails}}<img src="{{this}}" alt="Thumbnail">{{/each}}</p>
         </li>
     {{/each}}
 </ul>
-<div>
+<div class="pagination">
     {{#if hasPrevPage}}
         <a href="{{prevLink}}">Página Anterior</a>
     {{/if}}
