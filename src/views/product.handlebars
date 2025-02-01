@@ -1,0 +1,34 @@
+<h1>{{product.title}}</h1>
+<div class="product-details">
+    <p>{{product.description}}</p>
+    <p>Precio: ${{product.price}}</p>
+    <p>Categoría: {{product.category}}</p>
+    <p>Stock: {{product.stock}}</p>
+    <button class="add-to-cart" data-id="{{product._id}}" data-cart-id="{{cartId}}">Agregar al carrito</button>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const showNotification = (message) => {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 1000);
+        };
+
+        document.querySelector('.add-to-cart').addEventListener('click', async (event) => {
+            const productId = event.target.getAttribute('data-id');
+            const cartId = event.target.getAttribute('data-cart-id');
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, { method: 'POST' });
+            if (response.ok) {
+                showNotification('Producto agregado al carrito');
+            } else {
+                showNotification('Error al agregar el producto al carrito');
+            }
+        });
+    });
+</script>

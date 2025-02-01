@@ -1,0 +1,40 @@
+<h1>Carrito</h1>
+<ul>
+    {{#each products}}
+        <li>
+            {{this.product.title}} - Cantidad: {{this.quantity}}
+            <button class="remove-from-cart" data-id="{{this.product._id}}" data-cart-id="{{../cartId}}">Eliminar</button>
+        </li>
+    {{/each}}
+</ul>
+
+<div class="notification" id="notification"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const showNotification = (message) => {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 1000);
+        };
+
+        document.querySelectorAll('.remove-from-cart').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const productId = event.target.getAttribute('data-id');
+                const cartId = event.target.getAttribute('data-cart-id');
+                const response = await fetch(`/api/carts/${cartId}/product/${productId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    showNotification('Producto eliminado del carrito');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showNotification('Error al eliminar el producto del carrito');
+                }
+            });
+        });
+    });
+</script>

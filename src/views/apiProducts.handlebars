@@ -1,0 +1,37 @@
+<h1>Lista de productos (API)</h1>
+
+<form action="/api/products" method="GET">
+    <label for="category">Categoría:</label>
+    <select id="category" name="category">
+        <option value="" {{#unless category}}selected{{/unless}}>Todas</option>
+        <option value="Electronicos" {{#if (eq category 'Electronicos')}}selected{{/if}}>Electrónicos</option>
+        <option value="Accesorios" {{#if (eq category 'Accesorios')}}selected{{/if}}>Accesorios</option>
+    </select>
+    <label for="sort">Ordenar por precio:</label>
+    <select id="sort" name="sort">
+        <option value="" {{#unless sort}}selected{{/unless}}>Sin orden</option>
+        <option value="asc" {{#if (eq sort 'asc')}}selected{{/if}}>Ascendente</option>
+        <option value="desc" {{#if (eq sort 'desc')}}selected{{/if}}>Descendente</option>
+    </select>
+    <label for="limit">Límite:</label>
+    <input type="number" id="limit" name="limit" value="{{limit}}">
+    <label for="page">Página:</label>
+    <input type="number" id="page" name="page" value="{{page}}">
+    <button type="submit">Aplicar filtros</button>
+</form>
+
+<ul>
+    {{#each products}}
+        <li>
+            {{this.title}} - ${{this.price}}
+        </li>
+    {{/each}}
+</ul>
+<div>
+    {{#if hasPrevPage}}
+        <a href="{{prevLink}}">Página Anterior</a>
+    {{/if}}
+    {{#if hasNextPage}}
+        <a href="{{nextLink}}">Página Siguiente</a>
+    {{/if}}
+</div>
