@@ -17,7 +17,7 @@ router.get('/:cid', async (req, res) => {
     try {
         const cart = await Cart.findById(req.params.cid).populate('products.product');
         if (cart) {
-            res.json(cart); // Cambiar de renderizar la vista a devolver JSON
+            res.json(cart); 
         } else {
             res.status(404).send('Carrito no encontrado');
         }

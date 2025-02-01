@@ -18,9 +18,6 @@
     {{/each}}
 </ul>
 
-<!-- Formulario para agregar nuevos productos -->
-
-
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
@@ -52,7 +49,6 @@
             document.getElementById('add-product-form').reset();
         });
 
-        // Manejar el clic en el botón de eliminar
         document.addEventListener('click', (event) => {
             if (event.target.classList.contains('delete-product')) {
                 const productId = event.target.getAttribute('data-id');

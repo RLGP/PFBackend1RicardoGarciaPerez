@@ -9,7 +9,7 @@ const Product = require('./models/Product');
 const viewsRouter = require('./routes/views');
 const productsRouter = require('./routes/products');
 const cartsRouter = require('./routes/carts');
-const cookieParser = require('cookie-parser'); // Importar cookie-parser
+const cookieParser = require('cookie-parser'); 
 
 // Conectar a MongoDB
 connectDB();
@@ -18,8 +18,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuración de Express y Handlebars
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Para manejar datos de formularios
-app.use(cookieParser()); // Usar cookie-parser
+app.use(express.urlencoded({ extended: true })); 
+app.use(cookieParser()); 
 
 // Registrar el helper 'eq'
 const handlebars = hbs.create({
@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
             const newProduct = new Product(product);
             await newProduct.save();
             const products = await Product.find();
-            io.emit('products', products); // Enviar la lista actualizada a todos los clientes
+            io.emit('products', products); 
         } catch (error) {
             console.error('Error al agregar el producto:', error);
         }
@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
         try {
             await Product.findByIdAndDelete(id);
             const products = await Product.find();
-            io.emit('products', products); // Enviar la lista actualizada a todos los clientes
+            io.emit('products', products); 
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
         }

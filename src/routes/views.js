@@ -14,7 +14,6 @@ router.get('/products', async (req, res) => {
 
     const products = await Product.paginate(filter, options);
 
-    // Crear un carrito si no existe
     let cartId = req.cookies.cartId;
     if (!cartId) {
         const newCart = new Cart();
@@ -37,7 +36,7 @@ router.get('/products', async (req, res) => {
         hasNextPage: products.hasNextPage,
         prevLink: products.hasPrevPage ? buildLink(products.prevPage) : null,
         nextLink: products.hasNextPage ? buildLink(products.nextPage) : null,
-        cartId, // Pasar el ID del carrito a la vista
+        cartId, 
         category,
         sort,
         page: products.page,

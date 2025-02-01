@@ -2,24 +2,21 @@ const fs = require('fs');
 
 class ProductManager {
     constructor(path) {
-        this.path = path; // Ruta del archivo JSON
+        this.path = path; 
     }
 
-    // Leer productos desde el archivo
     readProducts() {
         if (fs.existsSync(this.path)) {
             const data = fs.readFileSync(this.path, 'utf-8');
             return JSON.parse(data);
         }
-        return []; // Si el archivo no existe, retornar un array vacío
+        return []; 
     }
 
-    // Guardar productos en el archivo
     writeProducts(products) {
         fs.writeFileSync(this.path, JSON.stringify(products, null, 2));
     }
 
-    // Agregar un nuevo producto
     addProduct(product) {
         const products = this.readProducts();
         const newProduct = {
@@ -38,7 +35,6 @@ class ProductManager {
         return newProduct;
     }
 
-    // Eliminar un producto por ID
     deleteProduct(id) {
         const products = this.readProducts();
         const filteredProducts = products.filter(p => p.id !== id);
@@ -46,7 +42,6 @@ class ProductManager {
         return filteredProducts;
     }
 
-    // Obtener todos los productos
     getProducts() {
         return this.readProducts();
     }

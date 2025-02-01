@@ -106,7 +106,7 @@ p {
     z-index: 1000;
 }
 
-/* Estilos específicos para /api/products */
+/* Estilos para /api/products */
 .api-products-list {
     display: flex;
     flex-wrap: wrap;
