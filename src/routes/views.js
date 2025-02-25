@@ -4,7 +4,7 @@ const Cart = require('../models/Cart');
 const router = express.Router();
 
 router.get('/products', async (req, res) => {
-    const { category, sort, page = 1, limit = 2 } = req.query;
+    const { category, sort, page = 1, limit = 10 } = req.query;
     const filter = category ? { category } : {};
     const options = {
         sort: sort ? { price: sort === 'asc' ? 1 : -1 } : {},

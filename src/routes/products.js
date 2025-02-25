@@ -21,17 +21,17 @@ router.get('/', async (req, res) => {
             return link;
         };
 
-        res.render('apiProducts', {
-            products: products.docs,
+        res.json({
+            status: 'success',
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
             hasPrevPage: products.hasPrevPage,
             hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage ? buildLink(products.prevPage) : null,
-            nextLink: products.hasNextPage ? buildLink(products.nextPage) : null,
-            category,
-            sort,
-            limit,
-            page: products.page,
-            totalPages: products.totalPages
+            prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}${sort ? `&sort=${sort}` : ''}${category ? `&category=${category}` : ''}` : null,
+            nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}${sort ? `&sort=${sort}` : ''}${category ? `&category=${category}` : ''}` : null
         });
     } catch (error) {
         res.status(500).json({ status: 'error', message: error.message });
