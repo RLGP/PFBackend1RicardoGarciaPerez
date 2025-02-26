@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
@@ -48,6 +49,8 @@ io.on('connection', (socket) => {
     // Enviar la lista de productos al cliente al conectarse
     Product.find().then(products => {
         socket.emit('products', products);
+    }).catch(err => {
+        console.error('Error al obtener productos:', err);
     });
 
     // Manejar la creación de un nuevo producto
@@ -59,6 +62,7 @@ io.on('connection', (socket) => {
             io.emit('products', products); 
         } catch (error) {
             console.error('Error al agregar el producto:', error);
+            socket.emit('productError', { message: error.message });
         }
     });
 
@@ -70,6 +74,7 @@ io.on('connection', (socket) => {
             io.emit('products', products); 
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
+            socket.emit('productError', { message: error.message });
         }
     });
 });
@@ -81,6 +86,7 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar el servidor
-http.listen(8080, '0.0.0.0', () => {
-    console.log('Servidor conectado en el puerto 8080');
+const PORT = process.env.PORT || 8080;
+http.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor conectado en el puerto ${PORT}`);
 });

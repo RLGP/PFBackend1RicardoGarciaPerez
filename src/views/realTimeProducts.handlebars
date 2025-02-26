@@ -1,35 +1,51 @@
 <h1>Lista de productos en tiempo real</h1>
 <form id="add-product-form">
-    <input type="text" id="title" placeholder="Título" >
-    <input type="text" id="description" placeholder="Descripción" >
-    <input type="text" id="code" placeholder="Código" >
-    <input type="number" id="price" placeholder="Precio" >
-    <input type="number" id="stock" placeholder="Stock" >
-    <input type="text" id="category" placeholder="Categoría" >
-    <input type="text" id="thumbnails" placeholder="Thumbnails ">
-    <button type="submit" >Agregar producto</button>
+    <input type="text" id="title" placeholder="Título" required>
+    <input type="text" id="description" placeholder="Descripción" required>
+    <input type="text" id="code" placeholder="Código" required>
+    <input type="number" id="price" placeholder="Precio" required>
+    <input type="number" id="stock" placeholder="Stock" required>
+    <input type="text" id="category" placeholder="Categoría" required>
+    <input type="text" id="thumbnails" placeholder="Thumbnails (separados por coma)">
+    <button type="submit">Agregar producto</button>
 </form>
-<ul>
+<ul id="product-list">
     {{#each products}}
         <li>
             {{this.title}} - ${{this.price}}
-            <button class="borrar" data-id="{{this.id}}">Eliminar</button>
+            <button class="delete-product" data-id="{{this._id}}">Eliminar</button>
         </li>
     {{/each}}
 </ul>
 
+<div id="notification" style="display: none; padding: 10px; margin: 10px 0; background-color: #f8d7da; color: #721c24; border-radius: 5px;"></div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
+    const showNotification = (message, isError = false) => {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.style.backgroundColor = isError ? '#f8d7da' : '#d4edda';
+        notification.style.color = isError ? '#721c24' : '#155724';
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    };
 
     socket.on('products', (products) => {
-        const productList = document.querySelector('ul');
+        const productList = document.getElementById('product-list');
         productList.innerHTML = products.map(product => `
             <li>
                 ${product.title} - $${product.price}
-                <button class="delete-product" data-id="${product.id}">Eliminar</button>
+                <button class="delete-product" data-id="${product._id}">Eliminar</button>
             </li>
         `).join('');
+    });
+
+    socket.on('productError', (error) => {
+        showNotification(error.message, true);
     });
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -42,17 +58,20 @@
                 price: parseFloat(document.getElementById('price').value),
                 stock: parseInt(document.getElementById('stock').value),
                 category: document.getElementById('category').value,
-                thumbnails: document.getElementById('thumbnails').value.split(',').map(thumbnail => thumbnail.trim())
+                thumbnails: document.getElementById('thumbnails').value ? 
+                    document.getElementById('thumbnails').value.split(',').map(thumbnail => thumbnail.trim()) : []
             };
 
             socket.emit('newProduct', newProduct); 
+            showNotification('Producto agregado correctamente');
             document.getElementById('add-product-form').reset();
         });
 
         document.addEventListener('click', (event) => {
             if (event.target.classList.contains('delete-product')) {
                 const productId = event.target.getAttribute('data-id');
-                socket.emit('deleteProduct', parseInt(productId)); 
+                socket.emit('deleteProduct', productId); 
+                showNotification('Producto eliminado correctamente');
             }
         });
     });
