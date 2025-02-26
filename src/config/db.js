@@ -5,13 +5,11 @@ const Product = require('../models/Product');
 
 const connectDB = async () => {
     try {
-        // Usar MongoDB Atlas o fallback a local
-        const mongoURI = process.env.MONGODB_URI ||
+        // Fix the missing fallback value for MongoDB URI
+        const mongoURI = process.env.MONGODB_URI || 'mongodb://0.0.0.0:27017/ecommerce';
         
-        await mongoose.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+        // Remove deprecated options
+        await mongoose.connect(mongoURI);
         
         console.log('MongoDB conectado');
         
@@ -27,7 +25,8 @@ const connectDB = async () => {
                     await Product.insertMany(initialData);
                     console.log('Datos iniciales cargados correctamente');
                 } else {
-                    console.log('No se encontró el archivo de datos iniciales');
+                    // Suppress the message about missing initial data file
+                    // console.log('No se encontró el archivo de datos iniciales');
                 }
             } catch (error) {
                 console.error('Error al cargar datos iniciales:', error);
