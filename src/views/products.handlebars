@@ -1,4 +1,13 @@
-<h1>Lista de productos</h1>
+<div class="header-container">
+    <div class="header-left"></div>
+    <h1>Lista de productos</h1>
+    <div class="header-right">
+        <a href="/carts/{{cartId}}" class="cart-button">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-text">Ver Carrito</span>
+        </a>
+    </div>
+</div>
 <p>Carrito actual: {{cartId}}</p>
 <form action="/change-cart" method="POST">
     <label for="cartId">Cambiar Carrito:</label>

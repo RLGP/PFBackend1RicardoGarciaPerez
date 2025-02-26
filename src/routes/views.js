@@ -50,14 +50,41 @@ router.get('/products/:pid', async (req, res) => {
 });
 
 router.get('/carts/:cid', async (req, res) => {
-    const cart = await Cart.findById(req.params.cid).populate('products.product');
-    res.render('cart', { products: cart.products, cartId: req.params.cid });
+    try {
+        const cart = await Cart.findById(req.params.cid).populate('products.product');
+        
+        // Verificar si el carrito existe
+        if (!cart) {
+            const newCart = new Cart();
+            await newCart.save();
+            res.cookie('cartId', newCart._id, { httpOnly: true });
+            return res.redirect(`/carts/${newCart._id}`);
+        }
+        
+        res.render('cart', { products: cart.products, cartId: req.params.cid });
+    } catch (error) {
+        console.error('Error al obtener el carrito:', error);
+        res.status(500).render('error', { 
+            message: 'Error al obtener el carrito',
+            error: { status: 500 }
+        });
+    }
 });
 
 router.post('/change-cart', async (req, res) => {
     const { cartId } = req.body;
     res.cookie('cartId', cartId, { httpOnly: true });
     res.redirect('/products');
+});
+
+router.get('/realtimeproducts', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.render('realTimeProducts', { products });
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).send('Error al cargar la página');
+    }
 });
 
 module.exports = router;

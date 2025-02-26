@@ -158,3 +158,40 @@ p {
     border: none;
     cursor: pointer;
 }
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00a2ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.header-container h1 {
+    margin-bottom: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+.cart-button {
+    display: flex;
+    align-items: center;
+    background-color: #ff9a00;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.cart-icon {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.cart-text {
+    font-size: 16px;
+}
